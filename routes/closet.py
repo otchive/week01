@@ -85,7 +85,7 @@ def fix_item(item_id):
                 "size": request.form.get("size"),
                 "season": request.form.get("season"),
                 "buy_date": request.form.get("buy_date"),
-                "price": request.form.get("price"),
+                "price": int(request.form.get("price")),
                 "buy_method": request.form.get("buy_method")
             }}
         )
