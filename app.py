@@ -15,6 +15,7 @@ app.register_blueprint(mypage_bp, url_prefix="/mypage")
 
 @app.route("/")
 def index():
+    # session.pop('user_id', None)
     #로그인 유무에 따라 화면 이동
     if "user_id" not in session:
         return redirect(url_for("auth.login"))

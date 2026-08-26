@@ -43,23 +43,5 @@
         <a href="/auth/signup"><u>아직 계정이 없으신가요? 회원가입</u></a>
     </p>
 </div>
-<script>
-function proceedLogin() {
-    let id = $("#input-id").val();
-    let pw = $("#input-pw").val();
-
-    $.ajax({
-        method: "POST",
-        url: `/auth/login`,
-        data: { "userid": id, "userpw": pw },
-        success: function(response) {
-            alert(response["message"]);
-
-            if(response["status"] == "success") {
-                window.location.href = "/";
-            }
-        }
-    });
-}
-</script>
+<script  src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

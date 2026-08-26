@@ -3,6 +3,8 @@ from services.closet_service import create_closet_item
 from bson.objectid import ObjectId
 from db import items
 
+from db import *
+
 closet_bp = Blueprint("closet", __name__)
 
 
@@ -30,9 +32,6 @@ def register_item():
         try:
             file = request.files["file"]
             item_id = create_closet_item(user_id, request.form, file)
-            return jsonify({"message": "성공적으로 등록되었습니다.", "item_id": item_id}), 201
-        except Exception as e:
-            return jsonify({"message": f"등록 실패: {str(e)}"}), 500
 
     return render_template("closet/register.html")
 
