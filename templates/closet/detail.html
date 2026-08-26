@@ -29,7 +29,7 @@
         <div class="column is-7">
             <div class="card">
                 <div class="card-header">
-                    <p class="card-header-title is-size-4" >옷 상세 정보</p>
+                    <p class="card-header-title is-size-4">옷 상세 정보</p>
                 </div>
             </div>
             <div class="card-content">
@@ -56,31 +56,55 @@
                                 <th>종류</th>
                                 <td>
                                     <span class="view-mode">{{ item.type }}</span>
-                                    <input class="input is-small edit-mode is-hidden" type="text" name="type"
-                                        value="{{ item.type }}">
+                                    <div class=" is-small edit-mode is-hidden">
+                                        <select name="type">
+                                            <option value="상의" {% if item.type=="상의" %}selected{% endif %}>상의</option>
+                                            <option value="하의" {% if item.type=="하의" %}selected{% endif %}>하의</option>
+                                            <option value="외투" {% if item.type=="외투" %}selected{% endif %}>외투</option>
+                                            <option value="신발" {% if item.type=="신발" %}selected{% endif %}>신발</option>
+                                            <option value="액세서리" {% if item.type=="액세서리" %}selected{% endif %}>액세서리
+                                            </option>
+                                        </select>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>사이즈</th>
                                 <td>
                                     <span class="view-mode">{{ item.size }}</span>
-                                    <input class="input is-small edit-mode is-hidden" type="text" name="size"
-                                        value="{{ item.size }}">
+                                    <div class="select is-small edit-mode is-hidden">
+                                        <select name="size">
+                                            <option value="FREE" {% if item.size=="FREE" %}selected{% endif %}>FREE
+                                            </option>
+                                            <option value="XS" {% if item.size=="XS" %}selected{% endif %}>XS</option>
+                                            <option value="S" {% if item.size=="S" %}selected{% endif %}>S</option>
+                                            <option value="M" {% if item.size=="M" %}selected{% endif %}>M</option>
+                                            <option value="L" {% if item.size=="L" %}selected{% endif %}>L</option>
+                                            <option value="XL" {% if item.size=="XL" %}selected{% endif %}>XL</option>
+                                            <option value="XXL" {% if item.size=="XXL" %}selected{% endif %}>XXL
+                                            </option>
+                                        </select>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>시즌</th>
                                 <td>
                                     <span class="view-mode">{{ item.season }}</span>
-                                    <input class="input is-small edit-mode is-hidden" type="text" name="season"
-                                        value="{{ item.season }}">
+                                    <div class="select is-small edit-mode is-hidden">
+                                        <select name="season">
+                                            <option value="SS" {% if item.season=="SS" %}selected{% endif %}>SS</option>
+                                            <option value="AW" {% if item.season=="AW" %}selected{% endif %}>AW</option>
+                                            <option value="FW" {% if item.season=="FW" %}selected{% endif %}>FW</option>
+                                        </select>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>구매날짜</th>
                                 <td>
                                     <span class="view-mode">{{ item.buy_date }}</span>
-                                    <input class="input is-small edit-mode is-hidden" type="text" name="buy_date"
+                                    <input class="input is-small edit-mode is-hidden" type="date" name="buy_date"
                                         value="{{ item.buy_date }}">
                                 </td>
                             </tr>
@@ -89,7 +113,7 @@
                                 <td>
                                     <span class="view-mode">{{ item.price }}원</span>
                                     <input class="input is-small edit-mode is-hidden" type="number" name="price"
-                                        value="{{ item.price }}">
+                                        step="1000" min="0" value="{{ item.price }}">
                                 </td>
                             </tr>
                             <tr>
@@ -120,11 +144,12 @@
                 <div class="buttons view-mode">
                     <button class="button is-warning" onclick="toggleEditMode(true)">수정</button>
                     <button class="button is-danger" onclick="deleteItem('{{ item._id }}')">삭제</button>
-                    <button class="button {% if item.is_life_fit %}is-light{% else %}is-success{% endif %}" onclick="toggleLifeFit('{{ item._id }}')">
+                    <button class="button {% if item.is_life_fit %}is-light{% else %}is-success{% endif %}"
+                        onclick="toggleLifeFit('{{ item._id }}')">
                         {% if item.is_life_fit %}
-                            인생핏 취소
+                        인생핏 취소
                         {% else %}
-                            인생핏 등록
+                        인생핏 등록
                         {% endif %}
                     </button>
                 </div>
