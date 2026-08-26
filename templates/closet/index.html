@@ -13,17 +13,16 @@
         </div>
     </div>
     <hr />
-    <div class="field is-grouped mb-3" style="overflow-x: auto">
-        <button id="type-all" class="button is-primary">전체</button>
-        <button id="type-upper" class="button">상의</button>
-        <button id="type-lower" class="button">하의</button>
-        <button id="type-outer" class="button">외투</button>
-        <button id="type-shoes" class="button">신발</button>
-        <button id="type-acces" class="button">악세서리</button>
+    <div class="field is-grouped mb-3" style="overflow-x: auto;">
+        <a href="/closet" id="type-all" class="button {% if btn_ctrl[0] == True %} is-primary {% endif %}">전체</a>
+        <a href="/closet?type=상의" id="type-upper" class="button {% if btn_ctrl[1] == True %} is-primary {% endif %}">상의</a>
+        <a href="/closet?type=하의" id="type-lower" class="button {% if btn_ctrl[2] == True %} is-primary {% endif %}">하의</a>
+        <a href="/closet?type=외투" id="type-outer" class="button {% if btn_ctrl[3] == True %} is-primary {% endif %}">외투</a>
+        <a href="/closet?type=신발" id="type-shoes" class="button {% if btn_ctrl[4] == True %} is-primary {% endif %}">신발</a>
+        <a href="/closet?type=악세서리" id="type-acces" class="button {% if btn_ctrl[5] == True %} is-primary {% endif %}">악세서리</a>
     </div>
     <div id="closets-grid" class="fixed-grid has-2-cols">
         <div class="grid">
-            <!-- 여기서 Jinja 템플릿이 제대로 쓰이게 되네요 -->
             {% for item in items %}
             <div class="cell">
                 <div class="box">
@@ -38,12 +37,13 @@
                     <p class="mb-3">
                         {{ item['price'] }}원, 착용 횟수: {{ item['wear_count'] }}회
                     </p>
-                    <a href="#"><u>상세정보 보러가기</u></a>
+                    <a href="{{ url_for('closet.get_item', item_id=item['_id']) }}"><u>상세정보 보러가기</u></a>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/closet.js') }}"></script>
 {% endblock %}

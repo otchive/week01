@@ -9,7 +9,7 @@ def mypage():
 
     stats = get_closet_stats(user_id)
 
-    return render_template('mypage/index.html', user=user_id)
+    return render_template('mypage/index.html', user=user_id, stats=stats)
 
 
 def get_closet_stats(user_id):
@@ -44,10 +44,10 @@ def get_closet_stats(user_id):
         sort=[("wear_count", 1)]
     )
 
-    return jsonify({
+    return {
         "total_count": total_count,
         "total_price": total_price,
         "most_worn": most_worn_item.get("name") if most_worn_item else "없음",
         "least_worn": least_worn_item.get("name") if least_worn_item else "없음"
-    })
+    }
 

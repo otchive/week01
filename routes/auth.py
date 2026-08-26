@@ -3,6 +3,7 @@ from flask import Blueprint
 from flask import Blueprint, render_template, request, jsonify, session
 
 from db import *
+import re
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -10,6 +11,9 @@ auth_bp = Blueprint('auth', __name__)
 def check_id_unique():
     ID = request.args.get('id')
     print(ID)
+    valid = re.match(r'^[0-9|A-Z|a-z]{8,25}$', ID)
+    if not valid:
+        return jsonify({'status': 'failure', 'message': '8자 이상 25자 이하의 영문 대소문자 및 숫자만 가능합니다.'})
     test = users.find_one({'user_id': ID})
     if not test:
         return jsonify({'status': 'success', 'message': '사용 가능한 아이디입니다.'})
@@ -20,6 +24,9 @@ def check_id_unique():
 def check_nick_unique():
     nick = request.args.get('nick')
     print(nick)
+    valid = re.match(r'^..+$', nick)
+    if not valid:
+        return jsonify({'status': 'failure', 'message': '최소 2글자 이상 입력해주세요.'})
     test = users.find_one({'nickname': nick})
     if not test:
         return jsonify({'status': 'success', 'message': '사용 가능한 닉네임입니다.'})

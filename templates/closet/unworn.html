@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .columns {
+        align-items: center;
+    }
+</style>
+
+<div class="box m-5">
+    <div class="level">
+        <div class="level-left">
+            <p class="is-size-1 mb-4 has-text-weight-extrabold">안 입는 옷 (착용 0회)</p>
+        </div>
+
+        <div class="level-right">
+            <label for="logout">{{user}}님으로 로그인됨</label>
+            <button class="button is-danger" id="logout" onclick="proceedLogout()">로그아웃</button>
+        </div>
+    </div>
+    <hr />
+
+    <!-- 사진 가로세로는 96픽셀로 고정하기 -->
+    {% for unworn in unworn_list %}
+    <div class="columns">
+        <div class="column is-1">
+            <img src="{{unworn['image_url']}}"
+                alt="사진" width="96" height="96">
+        </div>
+        <div class="column">
+            <p class="is-size-4">{{unworn['brand']}} · {{unworn['type']}} · {{unworn['price']}}원 <br> 구매날짜 {{unworn['buy_date']}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<hr/>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script></script>
+{% endblock %}

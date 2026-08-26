@@ -7,13 +7,20 @@ from db import *
 
 closet_bp = Blueprint("closet", __name__)
 
+cloth_type_id = {'상의': 1, '하의': 2, '외투': 3, '신발': 4, '악세서리': 5}
 
 @closet_bp.route('/', methods=['GET'])
 def index():
+    button_ctrl = [False for _ in range(6)]
+    cloth_type = request.args.get('type')
     user = session['user_id']
-    closet_items = items.find({}, { '_id': 0 })
-    print(closet_items[0])
-    return render_template('closet/index.html', user=user, items=closet_items)
+    if cloth_type:
+        closet_items = items.find({'user_id': user, 'type': cloth_type})
+        button_ctrl[cloth_type_id.get(cloth_type)] = True
+    else:
+        closet_items = items.find({'user_id': user})
+        button_ctrl[0] = True
+    return render_template('closet/index.html', user=user, items=closet_items, btn_ctrl=button_ctrl)
 
 
 # 등록 API
@@ -32,23 +39,37 @@ def register_item():
         try:
             file = request.files["file"]
             item_id = create_closet_item(user_id, request.form, file)
-
+            return jsonify({"message": "성공적으로 등록되었습니다.", "item_id": item_id}), 201
+        
+        except Exception as e:
+            return jsonify({"message": f"등록 실패: {str(e)}"}), 500
+        
     return render_template("closet/register.html")
 
 
-# 옷 상세 API
-@closet_bp.route("/<item_id>")
+# 옷 상세 페이지
+@closet_bp.route("/<item_id>/detail", methods=["GET"])
 def get_item(item_id):
-    item = items.find_one({
-        "_id": ObjectId(item_id)
-    })
+    user = session['user_id']
+
+    try:
+        item = items.find_one({
+            "_id": ObjectId(item_id)
+        })
+    except Exception:
+        return "잘못된 옷 ID입니다.", 400
 
     if not item:
-        return jsonify({"message": "옷을 찾을 수 없습니다."}), 404
+        return "옷을 찾을 수 없습니다.", 404
 
     item["_id"] = str(item["_id"])
 
-    return jsonify(item), 200
+    return render_template(
+        "closet/detail.html",
+        user=user,
+        item=item
+    )
+
 
 # 옷 상세 - 수정 API
 @closet_bp.route("/<item_id>/edit", methods=["POST"])
@@ -74,19 +95,72 @@ def fix_item(item_id):
 # 옷 상세 - 삭제 API
 @closet_bp.route("/<item_id>/delete", methods=["DELETE"])
 def delete_item(item_id):
-    items.deleteOne({"_id": item_id})
-
+    items.delete_one({"_id": ObjectId(item_id)})
     return jsonify({"message": "삭제 완료"}), 200
 
-# 옷 상세 - 오늘 입었어요 API
-# @closet_bp.route("/<item_id>/wear", methods=["DELETE"])
-# def wear_item(item_id):
-#     items.update_one({"_id": item_id},
-#                      {"$set": )
+#옷 상세 - 오늘 입었어요 API
+@closet_bp.route("/<item_id>/wear", methods=["POST"])
+def wear_item(item_id):
+    try:
+        result = items.update_one({"_id": ObjectId(item_id)},
+                     {"$inc": {"wear_count": 1}
+                      })
 
-#     return jsonify({"message": "삭제 완료"}), 200
+    except Exception:
+        return jsonify({"message": "잘못된 옷 ID입니다."}), 400
 
+    if result.matched_count == 0:
+        return jsonify({"message": "옷을 찾을 수 없습니다."}), 404
 
-# /closet/<item_id>/life-fit
-# /closet/life-fit
-# /closet/unworn
+    item = items.find_one(
+        {"_id": ObjectId(item_id)},
+        {"wear_count": 1}
+    )
+
+    return jsonify({
+        "message": "착용 횟수가 증가했습니다.",
+        "wear_count": item.get("wear_count", 0)
+    }), 200
+    
+
+#옷 상세 - 인생핏 API
+@closet_bp.route("/<item_id>/life-fit", methods=["POST"])
+def toggle_life_fit(item_id):
+    try:
+        result = items.update_one({"_id": ObjectId(item_id)},
+                        [
+                            {
+                                "$set": {
+                                    "is_life_fit": {
+                                        "$not": "$is_life_fit"
+                                    }
+                                }
+                            }
+                        ]
+                    )
+    
+    except Exception:
+        return jsonify({"message": "잘못된 옷 ID입니다."}), 400
+
+    if result.matched_count == 0:
+        return jsonify({"message": "옷을 찾을 수 없습니다."}), 404
+
+    return jsonify({"message": "업데이트 완료"}), 200
+
+#마이페이지 안 입는 옷 API
+@closet_bp.route("/unworn")
+def unworn():
+    user = session['user_id']
+    unworn_list = items.find({'wear_count': 0, 'user_id': user})
+    unworn_list = list(unworn_list)
+    print(unworn_list)
+    return render_template('closet/unworn.html', user=user, unworn_list=unworn_list)
+
+#인생핏 화면
+@closet_bp.route('/life-fit')
+def life_fit():
+    user = session['user_id']
+    life_list = items.find({'is_life_fit': True, 'user_id': user})
+    life_list = list(life_list)
+    print(life_list)
+    return render_template('closet/life_fit.html', user=user, life_list=life_list)

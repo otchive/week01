@@ -3,9 +3,17 @@
 <head>
     <title>OtChive</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    
 </head>
 <body>
+{% if not request.path.startswith('/auth') %}
+<div class="buttons m-5  is-justify-content-flex-end">
+    <a href="/closet" class="button {% if request.path == '/closet/' %}is-primary{% endif %}">옷장</a>
+    <a href="/closet/register" class="button {% if request.path == '/closet/register' %}is-primary{% endif %}">등록</a>
+    <a href="/closet/life-fit" class="button {% if request.path == '/closet/life-fit' %}is-primary{% endif %}">인생핏</a>
+    <a href="/mypage" class="button {% if request.path == '/mypage/' %}is-primary{% endif %}">마이페이지</a>
+</div> 
+{% endif %}
+
 {% block content %}{% endblock %}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </body>

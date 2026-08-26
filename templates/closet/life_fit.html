@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box m-5">
+    <div class="level">
+        <div class="level-left">
+            <p class="is-size-1 mb-4 has-text-weight-extrabold">인생핏</p>
+        </div>
+
+        <div class="level-right">
+            <label for="logout">{{user}}님으로 로그인됨</label>
+            <button class="button is-danger" id="logout" onclick="proceedLogout()">로그아웃</button>
+        </div>
+    </div>
+    <hr />
+
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 한 줄에 1fr 크기로 2개 열 배치 */
+            gap: 16px;
+            /* 아이템 사이의 간격 */
+        }
+    </style>
+
+    <div id="closets-grid" class="fixed-grid has-2-cols">
+        <div class="grid">
+            {% for life in life_list %}
+            <div class="cell">
+                <div class="box">
+                    <img src="{{ life['image_url'] }}">
+                    <hr />
+                    <p class="is-size-3 has-text-weight-bold mb-3">
+                        {{ life['name'] }}
+                    </p>
+                    <p class="mb-3">
+                        {{ life['type'] }}
+                    </p>
+                    <p class="mb-3">
+                        {{ life['price'] }}원, 착용 횟수: {{ life['wear_count'] }}회
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- <div class="grid-container">
+        {% for life in life_list %}
+        <div style="font-size: 40px;">
+            <button class="button"
+                style=" width: 30%; height:40%;  margin-top: 50px; font-size: 25px; text-align: center;"> <img
+                    src="{{life['image_url']}}" alt="사진" width: 50%; height: 75%;></button>
+            {{ life['name'] }}
+        </div>
+        {% endfor %}
+    </div> -->
+</div>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

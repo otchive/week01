@@ -3,7 +3,7 @@
 <div class="box m-5">
     <div class="level">
         <div class="level-left">
-            <p class="is-size-1 mb-4 has-text-weight-extrabold">옷장 상세</p>
+            <p class="is-size-1 mb-4 has-text-weight-extrabold">옷 상세</p>
         </div>
 
         <div class="level-right">
@@ -29,7 +29,7 @@
         <div class="column is-7">
             <div class="card">
                 <div class="card-header">
-                    <p class="card-header-title">옷 상세 정보</p>
+                    <p class="card-header-title is-size-4" >옷 상세 정보</p>
                 </div>
             </div>
             <div class="card-content">
@@ -106,12 +106,12 @@
 
                 <div class="field is-grouped">
                     <p class="control">
-                        <button class="button is-primary">
-                            착용횟수: {{ item.wear_count }}회
+                        <button class="button is-primary" id="wear-count">
+                            착용횟수: {{ item.wear_count | default(0) }}회
                         </button>
                     </p>
                     <p class="control">
-                        <button class="button is-success">
+                        <button class="button is-info" onclick="wearItem('{{ item._id }}')">
                             오늘 입었어요 (+1)
                         </button>
                     </p>
@@ -120,7 +120,13 @@
                 <div class="buttons view-mode">
                     <button class="button is-warning" onclick="toggleEditMode(true)">수정</button>
                     <button class="button is-danger" onclick="deleteItem('{{ item._id }}')">삭제</button>
-                    <button class="button is-success" onclick="toggleLifeFit('{{ item._id }}')">인생핏 등록</button>
+                    <button class="button {% if item.is_life_fit %}is-light{% else %}is-success{% endif %}" onclick="toggleLifeFit('{{ item._id }}')">
+                        {% if item.is_life_fit %}
+                            인생핏 취소
+                        {% else %}
+                            인생핏 등록
+                        {% endif %}
+                    </button>
                 </div>
 
                 <div class="buttons edit-mode is-hidden">
@@ -131,9 +137,6 @@
         </div>
     </div>
 </div>
-
-
-
-
+<script src="{{ url_for('static', filename='js/detail.js') }}"></script>
 
 {% endblock %}

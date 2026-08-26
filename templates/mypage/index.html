@@ -16,26 +16,26 @@
         <div class="grid has-text-centered">
             <div class="cell">
                 <div class="box">
-                    <p class="is-size-3 has-text-weight-semibold">42</p>
+                    <p class="is-size-3 has-text-weight-semibold">{{ stats['total_count'] }}</p>
                     <p>총 보유 옷 수</p>
                 </div>
             </div>
             <div class="cell">
                 <div class="box">
-                    <p class="is-size-3 has-text-weight-semibold">₩1,530,000</p>
+                    <p class="is-size-3 has-text-weight-semibold">₩{{ stats['total_price'] }}</p>
                     <p>총 구매 금액</p>
                 </div>
             </div>
             <div class="cell">
                 <div class="box">
-                    <p class="is-size-3 has-text-weight-semibold">니트가디건</p>
+                    <p class="is-size-3 has-text-weight-semibold">{{ stats['most_worn'] }}</p>
                     <p>가장 많이 입은 옷</p>
                 </div>
 
             </div>
             <div class="cell">
                 <div class="box">
-                    <p class="is-size-3 has-text-weight-semibold">릭오웬스 팬츠</p>
+                    <p class="is-size-3 has-text-weight-semibold">{{ stats['least_worn'] }}</p>
                     <p>가장 적게 입은 옷</p>
                 </div>
             </div>
@@ -46,12 +46,12 @@
     </div>
 </div>
 <hr/>
-<div class="buttons m-5">
+<!-- <div class="buttons m-5">
     <div class="button">옷장</div>
     <div class="button">등록</div>
     <div class="button">인생핏</div>
-    <div class="button is-primary">마이</div>
-</div>
+    <div class="button is-primary">마이페이지</div>
+</div> -->
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 <script></script>
 {% endblock %}
